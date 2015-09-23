@@ -1,0 +1,24 @@
+{
+  "name": "axoloth/herbertextra",
+  "description": "Herbert Extra components - Put a few of Symfony in Wordpress",
+  "license": "MIT",
+  "require": {
+    "getherbert/framework": "~0.9",
+    "doctrine/orm": "2.5.*",
+	"symfony/form": "2.7.*",
+	"symfony/validator": "2.7.*",
+	"symfony/config": "2.7.*",
+	"symfony/translation": "2.7.*",
+	"symfony/twig-bridge": "2.7.*",
+	"symfony/security-csrf": "2.7.*"
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Axoloth\\HerbertExtra\\": ""
+    }
+  }
+}
