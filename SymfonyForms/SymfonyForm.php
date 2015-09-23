@@ -6,7 +6,7 @@
  * Singleton class that provide the formFactory.
  * 
  */
-namespace Axoloth\DoctrineHerbert\SymfonyForms;
+namespace Axoloth\HerbertExtra\SymfonyForms;
 
 use Symfony\Component\Validator\Validation;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -28,6 +28,8 @@ class SymfonyForm{
 	private static $_instance = null;
 	
 	private function __construct() {
+		
+		$vendorDir = getVendorDir();
 			
 		$csrfTokenManager = new CsrfTokenManager();
 		
@@ -36,13 +38,14 @@ class SymfonyForm{
 		$localCode = substr(get_locale(), 0, 2) ;
 		$translator = new Translator( $localCode );
 		$translator->addLoader('xlf', new XliffFileLoader());
-		$translator->addResource('xlf', VENDOR_FORM_DIR . '/Resources/translations/validators.en.xlf', $localCode, 'validators');
-		$translator->addResource('xlf', VENDOR_VALIDATOR_DIR . '/Resources/translations/validators.en.xlf', $localCode, 'validators');
+		$translator->addResource('xlf', $vendorDir . 'symfony\form\Resources\translations\validators.en.xlf', $localCode, 'validators');
+		$translator->addResource('xlf', $vendorDir . 'symfony\validator\Resources\translations\validators.en.xlf', $localCode, 'validators');
 		
 		$twig = herbert('Twig_Environment');
-		
-		$formEngine = new TwigRendererEngine(array(DEFAULT_FORM_THEME));
+				
+		$formEngine = new TwigRendererEngine(array(getDefaultFormTheme()));
 		$formEngine->setEnvironment($twig);
+				
 		$twig->addExtension(new TranslationExtension($translator));
 		$twig->addExtension(
 				new FormExtension(new TwigRenderer($formEngine, $csrfTokenManager))
