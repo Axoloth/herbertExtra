@@ -38,5 +38,4 @@ class WordpressThemeExtension extends \Twig_Extension{
 	public function getName(){
 		return 'template';
 	}
-
 }

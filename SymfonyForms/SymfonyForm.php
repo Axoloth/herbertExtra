@@ -5,6 +5,8 @@
  * Symfony form bootstrap
  * Singleton class that provide the formFactory.
  * 
+ * Give usage of Validator and Translator
+ * 
  */
 namespace Axoloth\HerbertExtra\SymfonyForms;
 
@@ -89,5 +91,4 @@ class SymfonyForm{
 	public function getFormFactory(){
 		return $this->formFactory;
 	}
-	
 }
