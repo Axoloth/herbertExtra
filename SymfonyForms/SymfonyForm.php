@@ -23,6 +23,7 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator;
+use Axoloth\HerbertExtra\Tools\ExtraLoader;
 
 /**
  * 
@@ -43,8 +44,12 @@ class SymfonyForm{
 			
 		$csrfTokenManager = new CsrfTokenManager();
 
-		AnnotationRegistry::registerAutoloadNamespace('\Symfony\\Component\\Validator\\Constraints\\', $vendorDir."symfony\validator");
-	
+		// AnnotationRegistry::registerAutoloadNamespace('\Symfony\\Component\\Validator\\Constraints\\', $vendorDir."symfony\validator");
+		AnnotationRegistry::registerLoader(new ExtraLoader(array(
+				'Symfony\Component\Validator\Constraints',
+				$vendorDir."symfony\validator",
+		)));
+		
 		$localCode = substr(get_locale(), 0, 2) ;
 
 		$translator = new Translator($localCode);
