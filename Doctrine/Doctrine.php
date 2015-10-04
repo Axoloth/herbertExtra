@@ -14,6 +14,8 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use DoctrineHerbert\Helper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\AnnotationReader;
 
 
 class Doctrine{
@@ -24,7 +26,19 @@ class Doctrine{
 	
 	private function __construct() {
 		
+		$vendorDir = getVendorDir();
+		
 		$paths = array( plugin_directory().'/Entity');
+		
+		$dbParams = array(
+				'driver'   => 'pdo_mysql',
+				'user'     => DB_USER,
+				'password' => DB_PASSWORD,
+				'dbname'   => DB_NAME,
+		);
+		
+		
+		/*
 		$isDevMode = false;
 		
 		$dbParams = array(
@@ -35,7 +49,40 @@ class Doctrine{
 		);
 		
 		$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-		$this->entityManager = EntityManager::create($dbParams, $config);	
+		
+		$this->entityManager = EntityManager::create($dbParams, $config);
+		*/
+		$ormconfig = new \Doctrine\ORM\Configuration();
+		$cache = new \Doctrine\Common\Cache\ArrayCache();
+		$ormconfig->setQueryCacheImpl($cache);
+		$ormconfig->setProxyDir($paths. '/Proxies');
+		$ormconfig->setProxyNamespace('EntityProxy');
+		$ormconfig->setAutoGenerateProxyClasses(true);
+		
+		// ORM mapping by Annotation Doctrine\Common\Annotations
+
+		
+		//AnnotationRegistry::registerFile($vendorDir. 'doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php');
+		
+		
+		
+		
+		$driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(
+				new \Doctrine\Common\Annotations\AnnotationReader(),
+				array($paths)
+				);
+				
+		
+		$ormconfig->setMetadataDriverImpl($driver);
+		$ormconfig->setMetadataCacheImpl($cache);
+		
+		AnnotationRegistry::registerFile($vendorDir. 'doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php');
+		AnnotationRegistry::registerAutoloadNamespace("Symfony\Component\Validator\Constraint", $vendorDir."symfony/validator");
+		
+		//AnnotationRegistry::registerAutoloadNamespace("MyProject\Annotations", "/path/to/myproject/src");
+		
+		
+		$this->entityManager = \Doctrine\ORM\EntityManager::create($dbParams,$ormconfig);
 		
 		$tablePrefix = new TablePrefix( $GLOBALS['table_prefix'] );
 		

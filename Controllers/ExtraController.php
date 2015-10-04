@@ -13,6 +13,7 @@ namespace Axoloth\HerbertExtra\Controllers;
 use Axoloth\HerbertExtra\Doctrine\Doctrine;
 use Axoloth\HerbertExtra\SymfonyForms\SymfonyForm;
 use Herbert\Framework\Http;
+use Symfony\Component\Validator\Validation;
 
 
 
@@ -23,10 +24,14 @@ class ExtraController{
 	protected $formFactory;
 	
 	protected $nbByPage=5;
+	
+	protected $validator;
+	
 		
 	public function __construct(){
 		$this->entityManager = Doctrine::getInstance()->getEntityManager();
 		$this->formFactory = SymfonyForm::getInstance()->getFormFactory();
+		// $this->validator = $this->formFactory->getValidator();
 	}
 	
 	protected function getPage( Http $http ){
